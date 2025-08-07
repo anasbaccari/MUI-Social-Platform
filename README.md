@@ -1,2 +1,2 @@
-# MUI-Social-Platform
-Application de réseau social moderne avec React et Material UI.
+# Social Media App Homepage built on React and MUI.
+
