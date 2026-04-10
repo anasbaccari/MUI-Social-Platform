@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Avatar, Typography, styled, Button, Grid, Chip, Divider, LinearProgress } from "@mui/material";
+import { Box, Card, CardContent, Avatar, Typography, styled, Button, Grid, Chip, LinearProgress } from "@mui/material";
 import { Edit, Share, Settings } from "@mui/icons-material";
 import AvatarImage from "../assets/avatar.jpg";
 

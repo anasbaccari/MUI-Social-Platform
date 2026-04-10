@@ -55,5 +55,6 @@ export const data = [
     title: "Profile",
     subtitle: "Your public timeline",
     icon: <AccountBoxIcon />,
+    path: "/profile",
   },
 ];

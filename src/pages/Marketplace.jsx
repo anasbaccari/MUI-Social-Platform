@@ -1,5 +1,5 @@
-import { Box, Card, CardContent, CardHeader, CardMedia, Avatar, Typography, styled, Button, Grid, Rating, Chip } from "@mui/material";
-import { ShoppingCart, LocalShipping } from "@mui/icons-material";
+import { Box, Card, CardContent, CardMedia, Typography, styled, Button, Grid, Rating, Chip } from "@mui/material";
+import { ShoppingCart } from "@mui/icons-material";
 
 const ProductCard = styled(Card)(({ theme }) => ({
   background: theme.palette.mode === "dark"

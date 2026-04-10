@@ -1,5 +1,5 @@
 import { Box, Card, CardContent, CardHeader, Avatar, Typography, styled, Button, Grid, Tooltip } from "@mui/material";
-import { BookmarkBorder, Share, Favorite, FavoriteBorder, Verified } from "@mui/icons-material";
+import { Share, Favorite, FavoriteBorder, Verified } from "@mui/icons-material";
 import { useState } from "react";
 
 const PageCard = styled(Card)(({ theme }) => ({

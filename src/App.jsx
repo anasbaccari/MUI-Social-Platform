@@ -1,23 +1,29 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useState } from "react";
+import { useState, lazy, Suspense, useMemo } from "react";
 import { Box, createTheme, ThemeProvider } from "@mui/material";
 import Navbar from "./components/Navbar/Navbar";
 import SideBar from "./components/Sidebar/SideBar";
-import RightBar from "./components/Rightbar/RightBar";
-import Home from "./pages/Home";
-import Pages from "./pages/Pages";
-import Groups from "./pages/Groups";
-import Marketplace from "./pages/Marketplace";
-import Friends from "./pages/Friends";
-import Settings from "./pages/Settings";
-import Profile from "./pages/Profile";
 import AddIcon from "./components/AddIcon";
+
+// Lazy load non-critical pages
+const Home = lazy(() => import("./pages/Home"));
+const Pages = lazy(() => import("./pages/Pages"));
+const Groups = lazy(() => import("./pages/Groups"));
+const Marketplace = lazy(() => import("./pages/Marketplace"));
+const Friends = lazy(() => import("./pages/Friends"));
+const Settings = lazy(() => import("./pages/Settings"));
+const Profile = lazy(() => import("./pages/Profile"));
+const RightBar = lazy(() => import("./components/Rightbar/RightBar"));
+
+// Fallback loader component
+const PageLoader = () => null;
 
 function App() {
   const [darkMode, setDarkMode] = useState(true);
   const darkModeHandler = () => setDarkMode((s) => !s);
 
-  const darkTheme = createTheme({
+  // Memoize theme to prevent unnecessary recalculations
+  const darkTheme = useMemo(() => createTheme({
     palette: {
       mode: darkMode ? "dark" : "light",
       primary: {
@@ -80,7 +86,7 @@ function App() {
         },
       },
     },
-  });
+  }), [darkMode]);
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -90,16 +96,20 @@ function App() {
           <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
             <Navbar darkModeHandler={darkModeHandler} darkMode={darkMode} />
             <Box sx={{ display: "flex", flex: 1 }}>
-              <Routes>
-                <Route path="/" element={<Home darkMode={darkMode} />} />
-                <Route path="/pages" element={<Pages darkMode={darkMode} />} />
-                <Route path="/groups" element={<Groups darkMode={darkMode} />} />
-                <Route path="/marketplace" element={<Marketplace darkMode={darkMode} />} />
-                <Route path="/friends" element={<Friends darkMode={darkMode} />} />
-                <Route path="/settings" element={<Settings darkMode={darkMode} />} />
-                <Route path="/profile" element={<Profile darkMode={darkMode} />} />
-              </Routes>
-              <RightBar darkMode={darkMode} />
+              <Suspense fallback={<PageLoader />}>
+                <Routes>
+                  <Route path="/" element={<Home darkMode={darkMode} />} />
+                  <Route path="/pages" element={<Pages darkMode={darkMode} />} />
+                  <Route path="/groups" element={<Groups darkMode={darkMode} />} />
+                  <Route path="/marketplace" element={<Marketplace darkMode={darkMode} />} />
+                  <Route path="/friends" element={<Friends darkMode={darkMode} />} />
+                  <Route path="/settings" element={<Settings darkMode={darkMode} />} />
+                  <Route path="/profile" element={<Profile darkMode={darkMode} />} />
+                </Routes>
+              </Suspense>
+              <Suspense fallback={null}>
+                <RightBar darkMode={darkMode} />
+              </Suspense>
             </Box>
           </Box>
           <AddIcon darkMode={darkMode} />

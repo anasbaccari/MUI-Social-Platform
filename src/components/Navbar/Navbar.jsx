@@ -16,7 +16,7 @@ import ForumIcon from "@mui/icons-material/Forum";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SearchIcon from "@mui/icons-material/Search";
-import { useState } from "react";
+import { useState, memo } from "react";
 
 const StyledToolbar = styled(Toolbar)({
   display: "flex",
@@ -261,4 +261,4 @@ function Navbar({ darkMode }) {
   );
 }
 
-export default Navbar;
+export default memo(Navbar);

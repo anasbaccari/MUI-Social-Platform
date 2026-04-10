@@ -13,8 +13,8 @@ import {
 import { data } from "../../data/SideBarData";
 import WbSunnyIcon from "@mui/icons-material/WbSunny";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
-import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { memo } from "react";
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
   transition: "all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
@@ -232,4 +232,4 @@ function SideBar({ mode, darkModeHandler }) {
   );
 }
 
-export default SideBar;
+export default memo(SideBar);

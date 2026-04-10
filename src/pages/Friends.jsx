@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Avatar, Typography, styled, Button, Grid, Chip, AvatarGroup } from "@mui/material";
+import { Box, Card, CardContent, Avatar, Typography, styled, Button, Grid, Chip } from "@mui/material";
 import { PersonAdd, PersonRemove, Message } from "@mui/icons-material";
 import { useState } from "react";
 

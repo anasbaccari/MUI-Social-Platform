@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import AvatarImage from "../../assets/avatar.jpg";
 import CommentIcon from "@mui/icons-material/Comment";
-import { useState } from "react";
+import { useState, memo } from "react";
 
 const posts = [
   {
@@ -23,7 +23,7 @@ const posts = [
     author: "Sarah Anderson",
     publishedAt: "2h ago",
     location: "Paris, France",
-    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&h=480&fit=crop",
+    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=720&h=400&fit=crop&q=75&auto=format&fmt=webp",
     text: "Captured this sunset while exploring side streets near the river. Travel always resets my creativity.",
     likes: "2.4K",
     comments: "342",
@@ -33,7 +33,7 @@ const posts = [
     author: "Sarah Anderson",
     publishedAt: "4h ago",
     location: "Dubai, UAE",
-    image: "https://images.unsplash.com/photo-1495704686750-30318e92e68f?w=900&h=480&fit=crop",
+    image: "https://images.unsplash.com/photo-1495704686750-30318e92e68f?w=720&h=400&fit=crop&q=75&auto=format&fmt=webp",
     text: "Quick team meetup before launch week. Great momentum and even better conversations.",
     likes: "1.8K",
     comments: "128",
@@ -43,7 +43,7 @@ const posts = [
     author: "Sarah Anderson",
     publishedAt: "6h ago",
     location: "New York, USA",
-    image: "https://images.unsplash.com/photo-1518391846015-55a9cc003b25?w=900&h=480&fit=crop",
+    image: "https://images.unsplash.com/photo-1518391846015-55a9cc003b25?w=720&h=400&fit=crop&q=75&auto=format&fmt=webp",
     text: "Late-night city walks are underrated. This skyline always feels like a movie set.",
     likes: "3.2K",
     comments: "456",
@@ -172,7 +172,14 @@ function Feed({ darkMode }) {
               </Typography>
             }
           />
-          <StyledCardMedia component="img" image={post.image} alt={post.location} loading="lazy" />
+          <StyledCardMedia 
+            component="img" 
+            image={post.image} 
+            alt={post.location} 
+            loading="lazy"
+            decoding="async"
+            sx={{ objectFit: "cover" }}
+          />
           <CardContent>
             <Typography variant="body2" sx={{ lineHeight: 1.8, fontSize: "15px", fontWeight: 500 }}>
               {post.text}
@@ -254,4 +261,4 @@ function Feed({ darkMode }) {
   );
 }
 
-export default Feed;
+export default memo(Feed);
