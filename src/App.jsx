@@ -13,6 +13,7 @@ const Marketplace = lazy(() => import("./pages/Marketplace"));
 const Friends = lazy(() => import("./pages/Friends"));
 const Settings = lazy(() => import("./pages/Settings"));
 const Profile = lazy(() => import("./pages/Profile"));
+const ExperienceHub = lazy(() => import("./pages/ExperienceHub"));
 const RightBar = lazy(() => import("./components/Rightbar/RightBar"));
 
 // Fallback loader component
@@ -92,9 +93,9 @@ function App() {
     <ThemeProvider theme={darkTheme}>
       <Router>
         <Box sx={{ display: "flex", minHeight: "100vh", bgcolor: "background.default" }}>
-          <SideBar darkMode={darkMode} />
+          <SideBar mode={darkMode} darkModeHandler={darkModeHandler} />
           <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
-            <Navbar darkModeHandler={darkModeHandler} darkMode={darkMode} />
+            <Navbar darkMode={darkMode} />
             <Box sx={{ display: "flex", flex: 1 }}>
               <Suspense fallback={<PageLoader />}>
                 <Routes>
@@ -105,14 +106,15 @@ function App() {
                   <Route path="/friends" element={<Friends darkMode={darkMode} />} />
                   <Route path="/settings" element={<Settings darkMode={darkMode} />} />
                   <Route path="/profile" element={<Profile darkMode={darkMode} />} />
+                  <Route path="/experience/:actionId" element={<ExperienceHub />} />
                 </Routes>
               </Suspense>
               <Suspense fallback={null}>
-                <RightBar darkMode={darkMode} />
+                <RightBar />
               </Suspense>
             </Box>
           </Box>
-          <AddIcon darkMode={darkMode} />
+          <AddIcon />
         </Box>
       </Router>
     </ThemeProvider>

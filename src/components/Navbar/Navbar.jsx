@@ -17,6 +17,8 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SearchIcon from "@mui/icons-material/Search";
 import { useState, memo } from "react";
+import { useNavigate } from "react-router-dom";
+import { toExperience } from "../../utils/navigation";
 
 const StyledToolbar = styled(Toolbar)({
   display: "flex",
@@ -123,22 +125,46 @@ const GlowingBadge = styled(Badge)({
 });
 
 function Navbar({ darkMode }) {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [searchValue, setSearchValue] = useState("");
   const openMenu = Boolean(anchorEl);
 
   const onOpenMenuHandler = (event) => setAnchorEl(event.currentTarget);
   const onCloseMenuHandler = () => setAnchorEl(null);
 
+  const openExperience = (actionId, options) => navigate(toExperience(actionId, options));
+
+  const onSearchKeyDown = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      openExperience("search", {
+        title: "Search Results",
+        context: searchValue || "all",
+      });
+    }
+  };
+
   return (
     <Box>
       <AppBar position="sticky" sx={{ top: 0, zIndex: 1200 }}>
         <StyledToolbar>
-          <Logo variant="h5" sx={{ display: { xs: "none", md: "block" } }}>
+          <Logo
+            variant="h5"
+            onClick={() => navigate("/")}
+            sx={{ display: { xs: "none", md: "block" }, cursor: "pointer" }}
+          >
             SocialHub
           </Logo>
 
           <IconButton
             aria-label="Open quick actions"
+            onClick={() =>
+              openExperience("notifications", {
+                title: "Quick Actions",
+                context: "mobile",
+              })
+            }
             sx={{
               display: { xs: "block", md: "none" },
               background: "linear-gradient(135deg, #00ffff 0%, #ff006e 100%)",
@@ -158,6 +184,9 @@ function Navbar({ darkMode }) {
             <SearchIcon sx={{ opacity: 0.8, color: "#00ffff" }} />
             <InputBase
               inputProps={{ "aria-label": "Search in social hub" }}
+              value={searchValue}
+              onChange={(event) => setSearchValue(event.target.value)}
+              onKeyDown={onSearchKeyDown}
               sx={{
                 width: "100%",
                 "& input": {
@@ -181,7 +210,15 @@ function Navbar({ darkMode }) {
               color="secondary"
               overlap="circular"
             >
-              <BadgeIcon aria-label="Messages">
+              <BadgeIcon
+                aria-label="Messages"
+                onClick={() =>
+                  openExperience("messages", {
+                    title: "Messages",
+                    context: "navbar",
+                  })
+                }
+              >
                 <MailIcon />
               </BadgeIcon>
             </GlowingBadge>
@@ -191,7 +228,15 @@ function Navbar({ darkMode }) {
               color="secondary"
               overlap="circular"
             >
-              <BadgeIcon aria-label="Notifications">
+              <BadgeIcon
+                aria-label="Notifications"
+                onClick={() =>
+                  openExperience("notifications", {
+                    title: "Notifications",
+                    context: "navbar",
+                  })
+                }
+              >
                 <NotificationsIcon />
               </BadgeIcon>
             </GlowingBadge>
@@ -253,9 +298,33 @@ function Navbar({ darkMode }) {
           },
         }}
       >
-        <MenuItem onClick={onCloseMenuHandler}>Profile</MenuItem>
-        <MenuItem onClick={onCloseMenuHandler}>Settings</MenuItem>
-        <MenuItem onClick={onCloseMenuHandler}>Logout</MenuItem>
+        <MenuItem
+          onClick={() => {
+            onCloseMenuHandler();
+            navigate("/profile");
+          }}
+        >
+          Profile
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            onCloseMenuHandler();
+            navigate("/settings");
+          }}
+        >
+          Settings
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            onCloseMenuHandler();
+            openExperience("settings", {
+              title: "Logout Confirmation",
+              context: "account",
+            });
+          }}
+        >
+          Logout
+        </MenuItem>
       </Menu>
     </Box>
   );

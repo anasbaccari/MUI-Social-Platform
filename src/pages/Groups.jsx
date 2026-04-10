@@ -1,26 +1,33 @@
 import { Box, Card, CardContent, CardHeader, Avatar, Typography, styled, Button, Grid, Chip } from "@mui/material";
 import { PeopleAlt, TrendingUp } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import { toExperience } from "../utils/navigation";
 
 const GroupCard = styled(Card)(({ theme }) => ({
-  background: theme.palette.mode === "dark"
-    ? "linear-gradient(135deg, rgba(17, 24, 52, 0.6) 0%, rgba(20, 30, 60, 0.4) 100%)"
-    : "rgba(255, 255, 255, 0.98)",
+  background:
+    theme.palette.mode === "dark"
+      ? "linear-gradient(135deg, rgba(17, 24, 52, 0.6) 0%, rgba(20, 30, 60, 0.4) 100%)"
+      : "rgba(255, 255, 255, 0.98)",
   backdropFilter: "blur(30px) saturate(180%)",
-  border: theme.palette.mode === "dark"
-    ? "1.5px solid rgba(0, 217, 255, 0.2)"
-    : "1.5px solid rgba(0, 217, 255, 0.1)",
+  border:
+    theme.palette.mode === "dark"
+      ? "1.5px solid rgba(0, 217, 255, 0.2)"
+      : "1.5px solid rgba(0, 217, 255, 0.1)",
   borderRadius: "20px",
   transition: "all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)",
   "&:hover": {
     transform: "translateY(-12px)",
-    boxShadow: theme.palette.mode === "dark"
-      ? "0 30px 80px rgba(0, 0, 0, 0.6), 0 0 60px rgba(0, 217, 255, 0.3)"
-      : "0 30px 80px rgba(0, 0, 0, 0.15), 0 0 60px rgba(0, 217, 255, 0.2)",
+    boxShadow:
+      theme.palette.mode === "dark"
+        ? "0 30px 80px rgba(0, 0, 0, 0.6), 0 0 60px rgba(0, 217, 255, 0.3)"
+        : "0 30px 80px rgba(0, 0, 0, 0.15), 0 0 60px rgba(0, 217, 255, 0.2)",
     borderColor: "#00d9ff",
   },
 }));
 
 function Groups() {
+  const navigate = useNavigate();
+
   const groups = [
     {
       id: 1,
@@ -28,7 +35,7 @@ function Groups() {
       members: "12.5K",
       posts: "2,345",
       avatar: "https://i.pravatar.cc/150?img=10",
-      description: "A vibrant community for web developers to share tips & tricks",
+      description: "A vibrant community for web developers to share tips and tricks",
       tags: ["Development", "Web"],
     },
     {
@@ -60,7 +67,7 @@ function Groups() {
     },
     {
       id: 5,
-      name: "AI & Machine Learning",
+      name: "AI and Machine Learning",
       members: "18.7K",
       posts: "4,123",
       avatar: "https://i.pravatar.cc/150?img=14",
@@ -91,13 +98,23 @@ function Groups() {
           WebkitTextFillColor: "transparent",
         }}
       >
-        👥 Discover Groups
+        Discover Groups
       </Typography>
 
       <Grid container spacing={3}>
         {groups.map((group) => (
           <Grid item xs={12} md={6} key={group.id}>
-            <GroupCard>
+            <GroupCard
+              onClick={() =>
+                navigate(
+                  toExperience("group", {
+                    title: group.name,
+                    context: String(group.id),
+                  }),
+                )
+              }
+              sx={{ cursor: "pointer" }}
+            >
               <CardHeader
                 avatar={
                   <Avatar
@@ -158,6 +175,15 @@ function Groups() {
                 <Button
                   variant="contained"
                   fullWidth
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    navigate(
+                      toExperience("group", {
+                        title: `${group.name} Join`,
+                        context: String(group.id),
+                      }),
+                    );
+                  }}
                   sx={{
                     background: "linear-gradient(135deg, #00ffff 0%, #ff006e 100%)",
                     color: "#0a0e27",

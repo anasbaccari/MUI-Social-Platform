@@ -1,35 +1,41 @@
 import { Box, Card, CardContent, CardHeader, Avatar, Typography, styled, Button, Grid, Tooltip } from "@mui/material";
 import { Share, Favorite, FavoriteBorder, Verified } from "@mui/icons-material";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toExperience } from "../utils/navigation";
 
 const PageCard = styled(Card)(({ theme }) => ({
-  background: theme.palette.mode === "dark"
-    ? "linear-gradient(135deg, rgba(17, 24, 52, 0.6) 0%, rgba(20, 30, 60, 0.4) 100%)"
-    : "rgba(255, 255, 255, 0.98)",
+  background:
+    theme.palette.mode === "dark"
+      ? "linear-gradient(135deg, rgba(17, 24, 52, 0.6) 0%, rgba(20, 30, 60, 0.4) 100%)"
+      : "rgba(255, 255, 255, 0.98)",
   backdropFilter: "blur(30px) saturate(180%)",
-  border: theme.palette.mode === "dark"
-    ? "1.5px solid rgba(0, 217, 255, 0.2)"
-    : "1.5px solid rgba(0, 217, 255, 0.1)",
+  border:
+    theme.palette.mode === "dark"
+      ? "1.5px solid rgba(0, 217, 255, 0.2)"
+      : "1.5px solid rgba(0, 217, 255, 0.1)",
   borderRadius: "20px",
   transition: "all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)",
   cursor: "pointer",
   "&:hover": {
     transform: "translateY(-12px)",
-    boxShadow: theme.palette.mode === "dark"
-      ? "0 30px 80px rgba(0, 0, 0, 0.6), 0 0 60px rgba(0, 217, 255, 0.3)"
-      : "0 30px 80px rgba(0, 0, 0, 0.15), 0 0 60px rgba(0, 217, 255, 0.2)",
+    boxShadow:
+      theme.palette.mode === "dark"
+        ? "0 30px 80px rgba(0, 0, 0, 0.6), 0 0 60px rgba(0, 217, 255, 0.3)"
+        : "0 30px 80px rgba(0, 0, 0, 0.15), 0 0 60px rgba(0, 217, 255, 0.2)",
     borderColor: "#00d9ff",
   },
 }));
 
-const StyledAvatar = styled(Avatar)(({ theme }) => ({
+const StyledAvatar = styled(Avatar)({
   width: 56,
   height: 56,
   border: "2.5px solid rgba(0, 217, 255, 0.4)",
   boxShadow: "0 0 20px rgba(0, 217, 255, 0.3)",
-}));
+});
 
 function Pages() {
+  const navigate = useNavigate();
   const [liked, setLiked] = useState({});
 
   const pages = [
@@ -38,7 +44,7 @@ function Pages() {
       name: "Design Inspiration Hub",
       handle: "@designhub",
       followers: "125.4K",
-      description: "Daily design trends, inspiration & resources for creative professionals",
+      description: "Daily design trends, inspiration and resources for creative professionals",
       avatar: "https://i.pravatar.cc/150?img=1",
       verified: true,
     },
@@ -106,13 +112,22 @@ function Pages() {
           WebkitTextFillColor: "transparent",
         }}
       >
-        📄 Discover Pages
+        Discover Pages
       </Typography>
 
       <Grid container spacing={3}>
         {pages.map((page) => (
           <Grid item xs={12} md={6} key={page.id}>
-            <PageCard>
+            <PageCard
+              onClick={() =>
+                navigate(
+                  toExperience("profile", {
+                    title: page.name,
+                    context: page.handle,
+                  }),
+                )
+              }
+            >
               <CardHeader
                 avatar={<StyledAvatar src={page.avatar} alt={page.name} />}
                 title={
@@ -130,14 +145,12 @@ function Pages() {
                     >
                       {page.name}
                     </Typography>
-                    {page.verified && (
-                      <Verified sx={{ fontSize: "18px", color: "#00ffff" }} />
-                    )}
+                    {page.verified && <Verified sx={{ fontSize: "18px", color: "#00ffff" }} />}
                   </Box>
                 }
                 subheader={
                   <Typography variant="caption" sx={{ opacity: 0.7 }}>
-                    {page.handle} • {page.followers} followers
+                    {page.handle} | {page.followers} followers
                   </Typography>
                 }
               />
@@ -149,6 +162,15 @@ function Pages() {
                   <Button
                     variant="contained"
                     size="small"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      navigate(
+                        toExperience("profile", {
+                          title: `${page.name} Follow`,
+                          context: page.handle,
+                        }),
+                      );
+                    }}
                     sx={{
                       background: "linear-gradient(135deg, #00ffff 0%, #ff006e 100%)",
                       color: "#0a0e27",
@@ -166,13 +188,33 @@ function Pages() {
                           transition: "all 0.3s ease",
                           "&:hover": { transform: "scale(1.2)" },
                         }}
-                        onClick={() => toggleLike(page.id)}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          toggleLike(page.id);
+                          navigate(
+                            toExperience("profile", {
+                              title: `${page.name} Reactions`,
+                              context: page.handle,
+                            }),
+                          );
+                        }}
                       >
                         {liked[page.id] ? <Favorite /> : <FavoriteBorder />}
                       </Box>
                     </Tooltip>
                     <Tooltip title="Share">
-                      <Box sx={{ cursor: "pointer", transition: "all 0.3s ease", "&:hover": { transform: "scale(1.2)" } }}>
+                      <Box
+                        sx={{ cursor: "pointer", transition: "all 0.3s ease", "&:hover": { transform: "scale(1.2)" } }}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          navigate(
+                            toExperience("share", {
+                              title: `${page.name} Share`,
+                              context: page.handle,
+                            }),
+                          );
+                        }}
+                      >
                         <Share />
                       </Box>
                     </Tooltip>

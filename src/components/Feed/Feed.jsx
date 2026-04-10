@@ -16,6 +16,8 @@ import {
 import AvatarImage from "../../assets/avatar.jpg";
 import CommentIcon from "@mui/icons-material/Comment";
 import { useState, memo } from "react";
+import { useNavigate } from "react-router-dom";
+import { toExperience } from "../../utils/navigation";
 
 const posts = [
   {
@@ -137,26 +139,56 @@ const StyledCardMedia = styled(CardMedia)({
 });
 
 function Feed({ darkMode }) {
+  const navigate = useNavigate();
   const [liked, setLiked] = useState(
     Object.fromEntries(posts.map((post) => [post.id, false])),
   );
 
-  const handleLike = (postId) => {
+  const openAction = (actionId, post) =>
+    navigate(
+      toExperience(actionId, {
+        title: post.author,
+        context: post.id,
+      }),
+    );
+
+  const handleLike = (event, post) => {
+    event.stopPropagation();
     setLiked((prev) => ({
       ...prev,
-      [postId]: !prev[postId],
+      [post.id]: !prev[post.id],
     }));
+    openAction("post", post);
   };
 
   return (
     <Box flex="3" sx={{ padding: { xs: "20px 10px 0", md: "20px 24px 0" } }}>
       {posts.map((post) => (
-        <StyledCard key={post.id}>
+        <StyledCard
+          key={post.id}
+          onClick={() => openAction("post", post)}
+          sx={{ cursor: "pointer" }}
+        >
           <StyledCardHeader
-            avatar={<StyledAvatar alt={post.author} src={AvatarImage} />}
+            avatar={
+              <StyledAvatar
+                alt={post.author}
+                src={AvatarImage}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  navigate("/profile");
+                }}
+              />
+            }
             action={
               <Tooltip title="More options" arrow>
-                <StyledIconButton aria-label="Open post settings">
+                <StyledIconButton
+                  aria-label="Open post settings"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    openAction("post", post);
+                  }}
+                >
                   <MoreVert />
                 </StyledIconButton>
               </Tooltip>
@@ -168,17 +200,21 @@ function Feed({ darkMode }) {
             }
             subheader={
               <Typography variant="caption" sx={{ opacity: 0.7, fontSize: "12px" }}>
-                {post.publishedAt} · {post.location}
+                {post.publishedAt} | {post.location}
               </Typography>
             }
           />
-          <StyledCardMedia 
-            component="img" 
-            image={post.image} 
-            alt={post.location} 
+          <StyledCardMedia
+            component="img"
+            image={post.image}
+            alt={post.location}
             loading="lazy"
             decoding="async"
             sx={{ objectFit: "cover" }}
+            onClick={(event) => {
+              event.stopPropagation();
+              openAction("media", post);
+            }}
           />
           <CardContent>
             <Typography variant="body2" sx={{ lineHeight: 1.8, fontSize: "15px", fontWeight: 500 }}>
@@ -200,7 +236,7 @@ function Feed({ darkMode }) {
               <Tooltip title="Like" arrow>
                 <StyledIconButton
                   aria-label={`Like post from ${post.author}`}
-                  onClick={() => handleLike(post.id)}
+                  onClick={(event) => handleLike(event, post)}
                 >
                   <Checkbox
                     checked={liked[post.id]}
@@ -233,7 +269,13 @@ function Feed({ darkMode }) {
 
             <Box sx={{ display: "flex", alignItems: "center", gap: "4px" }}>
               <Tooltip title="Comment" arrow>
-                <StyledIconButton aria-label={`Comment on post from ${post.author}`}>
+                <StyledIconButton
+                  aria-label={`Comment on post from ${post.author}`}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    openAction("post", post);
+                  }}
+                >
                   <CommentIcon />
                 </StyledIconButton>
               </Tooltip>
@@ -250,7 +292,14 @@ function Feed({ darkMode }) {
             </Box>
 
             <Tooltip title="Share" arrow>
-              <StyledIconButton aria-label={`Share post from ${post.author}`} sx={{ ml: "auto" }}>
+              <StyledIconButton
+                aria-label={`Share post from ${post.author}`}
+                sx={{ ml: "auto" }}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  openAction("share", post);
+                }}
+              >
                 <Share />
               </StyledIconButton>
             </Tooltip>
