@@ -7,6 +7,8 @@ import {
   Tooltip,
   keyframes,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { toExperience } from "../../utils/navigation";
 
 const photoHover = keyframes`
   0% { opacity: 0; transform: scale(0.8) rotate(-5deg); }
@@ -89,6 +91,8 @@ const StyledImageListItem = styled(ImageListItem)({
 });
 
 function LatestPhotos() {
+  const navigate = useNavigate();
+
   return (
     <PhotoContainer>
       <Typography
@@ -111,7 +115,16 @@ function LatestPhotos() {
       <ImageList rowHeight={120} gap={10} cols={3} sx={{ m: 0 }}>
         {photos.map((photo) => (
           <Tooltip key={photo.id} title={photo.label} arrow>
-            <StyledImageListItem>
+            <StyledImageListItem
+              onClick={() =>
+                navigate(
+                  toExperience("media", {
+                    title: photo.label,
+                    context: photo.id,
+                  }),
+                )
+              }
+            >
               <img
                 style={{
                   objectFit: "cover",

@@ -1,27 +1,34 @@
 import { Box, Card, CardContent, CardMedia, Typography, styled, Button, Grid, Rating, Chip } from "@mui/material";
 import { ShoppingCart } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import { toExperience } from "../utils/navigation";
 
 const ProductCard = styled(Card)(({ theme }) => ({
-  background: theme.palette.mode === "dark"
-    ? "linear-gradient(135deg, rgba(17, 24, 52, 0.6) 0%, rgba(20, 30, 60, 0.4) 100%)"
-    : "rgba(255, 255, 255, 0.98)",
+  background:
+    theme.palette.mode === "dark"
+      ? "linear-gradient(135deg, rgba(17, 24, 52, 0.6) 0%, rgba(20, 30, 60, 0.4) 100%)"
+      : "rgba(255, 255, 255, 0.98)",
   backdropFilter: "blur(30px) saturate(180%)",
-  border: theme.palette.mode === "dark"
-    ? "1.5px solid rgba(0, 217, 255, 0.2)"
-    : "1.5px solid rgba(0, 217, 255, 0.1)",
+  border:
+    theme.palette.mode === "dark"
+      ? "1.5px solid rgba(0, 217, 255, 0.2)"
+      : "1.5px solid rgba(0, 217, 255, 0.1)",
   borderRadius: "20px",
   transition: "all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)",
   overflow: "hidden",
   "&:hover": {
     transform: "translateY(-12px)",
-    boxShadow: theme.palette.mode === "dark"
-      ? "0 30px 80px rgba(0, 0, 0, 0.6), 0 0 60px rgba(0, 217, 255, 0.3)"
-      : "0 30px 80px rgba(0, 0, 0, 0.15), 0 0 60px rgba(0, 217, 255, 0.2)",
+    boxShadow:
+      theme.palette.mode === "dark"
+        ? "0 30px 80px rgba(0, 0, 0, 0.6), 0 0 60px rgba(0, 217, 255, 0.3)"
+        : "0 30px 80px rgba(0, 0, 0, 0.15), 0 0 60px rgba(0, 217, 255, 0.2)",
     borderColor: "#00d9ff",
   },
 }));
 
 function Marketplace() {
+  const navigate = useNavigate();
+
   const products = [
     {
       id: 1,
@@ -92,19 +99,24 @@ function Marketplace() {
           WebkitTextFillColor: "transparent",
         }}
       >
-        🛍️ Marketplace
+        Marketplace
       </Typography>
 
       <Grid container spacing={3}>
         {products.map((product) => (
           <Grid item xs={12} sm={6} md={4} key={product.id}>
-            <ProductCard>
-              <CardMedia
-                component="img"
-                height="200"
-                image={product.image}
-                alt={product.name}
-              />
+            <ProductCard
+              onClick={() =>
+                navigate(
+                  toExperience("marketplace", {
+                    title: product.name,
+                    context: String(product.id),
+                  }),
+                )
+              }
+              sx={{ cursor: "pointer" }}
+            >
+              <CardMedia component="img" height="200" image={product.image} alt={product.name} />
               <CardContent>
                 <Typography
                   variant="h6"
@@ -142,12 +154,25 @@ function Marketplace() {
                   >
                     {product.price}
                   </Typography>
-                  <Chip label="Free Shipping" size="small" sx={{ background: "rgba(16, 185, 129, 0.2)", color: "#10b981" }} />
+                  <Chip
+                    label="Free Shipping"
+                    size="small"
+                    sx={{ background: "rgba(16, 185, 129, 0.2)", color: "#10b981" }}
+                  />
                 </Box>
                 <Button
                   variant="contained"
                   fullWidth
                   startIcon={<ShoppingCart />}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    navigate(
+                      toExperience("marketplace", {
+                        title: `${product.name} Cart`,
+                        context: String(product.id),
+                      }),
+                    );
+                  }}
                   sx={{
                     background: "linear-gradient(135deg, #00ffff 0%, #ff006e 100%)",
                     color: "#0a0e27",

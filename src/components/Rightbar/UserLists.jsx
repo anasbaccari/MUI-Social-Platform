@@ -12,6 +12,8 @@ import {
   Chip,
   keyframes,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { toExperience } from "../../utils/navigation";
 
 const slideIn = keyframes`
   0% { transform: translateX(-20px); opacity: 0; }
@@ -123,6 +125,16 @@ const StyledButton = styled(Button)({
 });
 
 function UserLists() {
+  const navigate = useNavigate();
+
+  const openMessage = (chat) =>
+    navigate(
+      toExperience("messages", {
+        title: chat.user,
+        context: chat.id,
+      }),
+    );
+
   return (
     <UserListContainer>
       <Typography
@@ -145,7 +157,11 @@ function UserLists() {
       <StyledList>
         {chats.map((chat) => (
           <Tooltip key={chat.id} title={`Message from ${chat.user}`} arrow>
-            <ListItem alignItems="flex-start" sx={{ cursor: "pointer" }}>
+            <ListItem
+              alignItems="flex-start"
+              sx={{ cursor: "pointer" }}
+              onClick={() => openMessage(chat)}
+            >
               <ListItemAvatar>
                 <StyledAvatar alt={chat.user} src={chat.avatar} />
               </ListItemAvatar>
@@ -234,7 +250,18 @@ function UserLists() {
         ))}
       </StyledList>
 
-      <StyledButton fullWidth sx={{ mt: "14px" }}>
+      <StyledButton
+        fullWidth
+        sx={{ mt: "14px" }}
+        onClick={() =>
+          navigate(
+            toExperience("messages", {
+              title: "All Messages",
+              context: "list",
+            }),
+          )
+        }
+      >
         View All Messages
       </StyledButton>
     </UserListContainer>

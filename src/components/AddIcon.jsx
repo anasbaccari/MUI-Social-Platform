@@ -22,6 +22,8 @@ import PermMediaIcon from "@mui/icons-material/PermMedia";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import SendIcon from "@mui/icons-material/Send";
+import { useNavigate } from "react-router-dom";
+import { toExperience } from "../utils/navigation";
 
 const slideUp = keyframes`
   from {
@@ -200,10 +202,14 @@ const ActionIconsBox = styled(Box)(({ theme }) => ({
 }));
 
 function AddIcon() {
+  const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
   const onOpenModalHandler = () => setOpenModal(true);
   const onCloseModalHandler = () => setOpenModal(false);
   const [postContent, setPostContent] = useState("");
+
+  const openComposerAction = (actionId, title, context) =>
+    navigate(toExperience(actionId, { title, context }));
 
   return (
     <>
@@ -328,22 +334,34 @@ function AddIcon() {
           {/* Action Icons */}
           <ActionIconsBox>
             <Tooltip title="Add Emoji" arrow>
-              <ActionIcon size="small">
+              <ActionIcon
+                size="small"
+                onClick={() => openComposerAction("create", "Emoji Picker", "composer")}
+              >
                 <EmojiEmotionsIcon />
               </ActionIcon>
             </Tooltip>
             <Tooltip title="Add Photo" arrow>
-              <ActionIcon size="small">
+              <ActionIcon
+                size="small"
+                onClick={() => openComposerAction("media", "Upload Media", "composer")}
+              >
                 <PermMediaIcon />
               </ActionIcon>
             </Tooltip>
             <Tooltip title="Tag Friends" arrow>
-              <ActionIcon size="small">
+              <ActionIcon
+                size="small"
+                onClick={() => openComposerAction("friend", "Tag Friends", "composer")}
+              >
                 <PersonAddIcon />
               </ActionIcon>
             </Tooltip>
             <Tooltip title="Add Feeling" arrow>
-              <ActionIcon size="small">
+              <ActionIcon
+                size="small"
+                onClick={() => openComposerAction("create", "Add Feeling", "composer")}
+              >
                 <MoodIcon />
               </ActionIcon>
             </Tooltip>
@@ -366,6 +384,7 @@ function AddIcon() {
               onClick={() => {
                 setPostContent("");
                 onCloseModalHandler();
+                openComposerAction("create", "Post Published", "share");
               }}
             >
               Share Post

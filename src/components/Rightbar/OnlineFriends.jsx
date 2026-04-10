@@ -6,6 +6,8 @@ import {
   Tooltip,
   keyframes,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { toExperience } from "../../utils/navigation";
 
 const pulse = keyframes`
   0%, 100% {
@@ -60,6 +62,8 @@ const OnlineFriendsContainer = styled(Box)(({ theme }) => ({
 }));
 
 function OnlineFriends() {
+  const navigate = useNavigate();
+
   return (
     <OnlineFriendsContainer>
       <Typography
@@ -81,7 +85,17 @@ function OnlineFriends() {
       <Box sx={{ display: "flex", gap: "10px", flexWrap: "wrap", justifyContent: "start" }}>
         {friends.map((friend) => (
           <Tooltip key={friend.id} title={friend.name} arrow>
-            <Box sx={{ position: "relative" }}>
+            <Box
+              sx={{ position: "relative", cursor: "pointer" }}
+              onClick={() =>
+                navigate(
+                  toExperience("friend", {
+                    title: friend.name,
+                    context: friend.id,
+                  }),
+                )
+              }
+            >
               <StyledAvatar alt={friend.name} src={friend.src} />
               <Box
                 sx={{
