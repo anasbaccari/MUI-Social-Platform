@@ -1,50 +1,52 @@
 import {
   Avatar,
-  AvatarGroup,
   Box,
   Typography,
   styled,
   Tooltip,
+  keyframes,
 } from "@mui/material";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 
+const pulse = keyframes`
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.6), inset 0 0 10px rgba(16, 185, 129, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(16, 185, 129, 0.9), inset 0 0 20px rgba(16, 185, 129, 0.2);
+  }
+`;
+
 const StyledAvatar = styled(Avatar)(({ theme }) => ({
-  width: 48,
-  height: 48,
-  border: "2px solid rgba(217, 70, 239, 0.3)",
-  boxShadow: "0 0 12px rgba(217, 70, 239, 0.2)",
-  transition: "all 0.3s ease",
+  width: 52,
+  height: 52,
+  border: "2.5px solid rgba(16, 185, 129, 0.5)",
+  boxShadow: "0 0 20px rgba(16, 185, 129, 0.4), inset 0 0 15px rgba(16, 185, 129, 0.1)",
+  transition: "all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
   cursor: "pointer",
   position: "relative",
   "&:hover": {
-    transform: "scale(1.1)",
-    boxShadow: "0 0 24px rgba(217, 70, 239, 0.5)",
-    borderColor: "rgba(217, 70, 239, 0.6)",
+    transform: "scale(1.15) rotate(-10deg)",
+    boxShadow: "0 0 40px rgba(0, 217, 255, 0.6), inset 0 0 25px rgba(0, 217, 255, 0.2)",
+    borderColor: "#00ffff",
   },
-  "& .online-indicator": {
-    position: "absolute",
-    bottom: 0,
-    right: 0,
-    width: "14px",
-    height: "14px",
-    backgroundColor: "#10b981",
-    borderRadius: "50%",
-    border: "2px solid rgba(26, 26, 46, 1)",
-    boxShadow: "0 0 8px #10b981",
-  },
+  animation: `${pulse} 2.5s ease-in-out infinite`,
 }));
 
 const OnlineFriendsContainer = styled(Box)(({ theme }) => ({
-  padding: "16px",
+  padding: "18px",
   background: theme.palette.mode === "dark"
-    ? "rgba(26, 26, 46, 0.6)"
-    : "rgba(255, 255, 255, 0.6)",
-  backdropFilter: "blur(10px)",
+    ? "linear-gradient(135deg, rgba(17, 24, 52, 0.5) 0%, rgba(20, 30, 60, 0.3) 100%)"
+    : "linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(248, 249, 255, 0.6) 100%)",
+  backdropFilter: "blur(20px) saturate(180%)",
   border: theme.palette.mode === "dark"
-    ? "1px solid rgba(255, 255, 255, 0.1)"
-    : "1px solid rgba(0, 0, 0, 0.05)",
-  borderRadius: "16px",
-  marginBottom: "16px",
+    ? "1.5px solid rgba(0, 217, 255, 0.2)"
+    : "1.5px solid rgba(0, 217, 255, 0.1)",
+  borderRadius: "20px",
+  marginBottom: "18px",
+  boxShadow: theme.palette.mode === "dark"
+    ? "0 12px 48px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(0, 217, 255, 0.1)"
+    : "0 12px 48px rgba(0, 0, 0, 0.08)",
 }));
 
 function OnlineFriends() {
@@ -62,33 +64,32 @@ function OnlineFriends() {
         variant="h6"
         sx={{
           fontSize: "14px",
-          fontWeight: 700,
-          marginBottom: "12px",
-          background: "linear-gradient(135deg, #0a7ea4 0%, #d946ef 100%)",
+          fontWeight: 800,
+          marginBottom: "14px",
+          background: "linear-gradient(135deg, #00ffff 0%, #ff006e 100%)",
           backgroundClip: "text",
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",
           textTransform: "uppercase",
-          letterSpacing: "0.5px",
+          letterSpacing: "1px",
         }}
       >
-        🟢 Online Now
+        🔴 Online Now
       </Typography>
-      <Box sx={{ display: "flex", gap: "8px", flexWrap: "wrap", justifyContent: "start" }}>
+      <Box sx={{ display: "flex", gap: "10px", flexWrap: "wrap", justifyContent: "start" }}>
         {friends.map((friend) => (
           <Tooltip key={friend.name} title={friend.name} arrow>
             <Box sx={{ position: "relative" }}>
-              <StyledAvatar alt={friend.name} src={friend.src}>
-                <div className="online-indicator" />
-              </StyledAvatar>
+              <StyledAvatar alt={friend.name} src={friend.src} />
               <FiberManualRecordIcon
                 sx={{
                   position: "absolute",
-                  bottom: "0px",
-                  right: "0px",
+                  bottom: "-2px",
+                  right: "-2px",
                   color: "#10b981",
-                  fontSize: "12px",
-                  filter: "drop-shadow(0 0 4px #10b981)",
+                  fontSize: "14px",
+                  filter: "drop-shadow(0 0 8px #10b981)",
+                  animation: `${pulse} 2.5s ease-in-out infinite`,
                 }}
               />
             </Box>

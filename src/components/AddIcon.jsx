@@ -11,6 +11,7 @@ import {
   styled,
   Divider,
   Chip,
+  keyframes,
 } from "@mui/material";
 import { Add, Close } from "@mui/icons-material";
 import { useState } from "react";
@@ -22,80 +23,103 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
 import SendIcon from "@mui/icons-material/Send";
 
+const slideUp = keyframes`
+  from {
+    transform: translateY(30px) scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+`;
+
+const pulse = keyframes`
+  0%, 100% { boxShadow: 0 0 20px rgba(0, 217, 255, 0.4), 0 0 40px rgba(255, 0, 110, 0.1); }
+  50% { boxShadow: 0 0 40px rgba(0, 217, 255, 0.6), 0 0 60px rgba(255, 0, 110, 0.2); }
+`;
+
 const StyledModal = styled(Modal)(({ theme }) => ({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
   "& .MuiBackdrop-root": {
-    backgroundColor: "rgba(0, 0, 0, 0.7)",
-    backdropFilter: "blur(4px)",
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
+    backdropFilter: "blur(10px)",
   },
 }));
 
 const ModalContent = styled(Box)(({ theme }) => ({
   width: "95%",
-  maxWidth: "540px",
+  maxWidth: "560px",
   background: theme.palette.mode === "dark"
-    ? "linear-gradient(135deg, rgba(26, 26, 46, 0.95) 0%, rgba(26, 26, 46, 0.8) 100%)"
-    : "linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%)",
-  backdropFilter: "blur(20px)",
-  borderRadius: "20px",
-  padding: "24px",
+    ? "linear-gradient(135deg, rgba(10, 14, 39, 0.95) 0%, rgba(20, 30, 60, 0.85) 100%)"
+    : "linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 249, 255, 0.94) 100%)",
+  backdropFilter: "blur(30px) saturate(180%)",
+  borderRadius: "24px",
+  padding: "28px",
   border: theme.palette.mode === "dark"
-    ? "1px solid rgba(255, 255, 255, 0.1)"
-    : "1px solid rgba(0, 0, 0, 0.05)",
-  boxShadow: "0 20px 60px rgba(0, 0, 0, 0.3)",
+    ? "1.5px solid rgba(0, 217, 255, 0.2)"
+    : "1.5px solid rgba(0, 217, 255, 0.1)",
+  boxShadow: "0 24px 80px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(0, 217, 255, 0.1)",
   maxHeight: "90vh",
   overflowY: "auto",
-  animation: "slideUp 0.3s ease-out",
-  "@keyframes slideUp": {
-    from: {
-      transform: "translateY(20px)",
-      opacity: 0,
-    },
-    to: {
-      transform: "translateY(0)",
-      opacity: 1,
-    },
+  animation: `${slideUp} 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)`,
+  "&::-webkit-scrollbar": {
+    width: "8px",
+  },
+  "&::-webkit-scrollbar-track": {
+    background: "transparent",
+  },
+  "&::-webkit-scrollbar-thumb": {
+    background: "linear-gradient(135deg, #00ffff 0%, #ff006e 100%)",
+    borderRadius: "4px",
   },
 }));
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
   "& .MuiOutlinedInput-root": {
     backgroundColor: theme.palette.mode === "dark"
-      ? "rgba(255, 255, 255, 0.05)"
-      : "rgba(0, 0, 0, 0.02)",
-    borderRadius: "12px",
-    border: theme.palette.mode === "dark"
-      ? "1px solid rgba(255, 255, 255, 0.1)"
-      : "1px solid rgba(0, 0, 0, 0.05)",
-    transition: "all 0.3s ease",
+      ? "rgba(0, 217, 255, 0.05)"
+      : "rgba(0, 217, 255, 0.02)",
+    borderRadius: "16px",
+    border: "1.5px solid rgba(0, 217, 255, 0.15)",
+    transition: "all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
     "&:hover": {
       backgroundColor: theme.palette.mode === "dark"
-        ? "rgba(255, 255, 255, 0.08)"
-        : "rgba(0, 0, 0, 0.04)",
+        ? "rgba(0, 217, 255, 0.08)"
+        : "rgba(0, 217, 255, 0.04)",
+      borderColor: "rgba(0, 217, 255, 0.3)",
     },
     "&.Mui-focused": {
       backgroundColor: theme.palette.mode === "dark"
-        ? "rgba(255, 255, 255, 0.1)"
-        : "rgba(0, 0, 0, 0.05)",
-      borderColor: "#d946ef",
-      boxShadow: "0 0 20px rgba(217, 70, 239, 0.2)",
+        ? "rgba(0, 217, 255, 0.1)"
+        : "rgba(0, 217, 255, 0.06)",
+      borderColor: "#00ffff",
+      boxShadow: "0 0 24px rgba(0, 217, 255, 0.3), inset 0 1px 0 rgba(0, 217, 255, 0.1)",
     },
   },
-  "& .MuiInputBase-input::placeholder": {
-    opacity: 0.6,
-    fontStyle: "italic",
+  "& .MuiInputBase-input": {
+    color: "inherit",
+    fontSize: "15px",
+    fontWeight: 500,
+    "&::placeholder": {
+      opacity: 0.5,
+      fontStyle: "italic",
+      color: theme.palette.mode === "dark" ? "rgba(255, 255, 255, 0.4)" : "rgba(0, 0, 0, 0.4)",
+    },
   },
 }));
 
 const StyledFab = styled(Fab)(({ theme }) => ({
-  background: "linear-gradient(135deg, #0a7ea4 0%, #d946ef 100%)",
-  boxShadow: "0 8px 24px rgba(217, 70, 239, 0.3)",
-  transition: "all 0.3s ease",
+  background: "linear-gradient(135deg, #00ffff 0%, #ff006e 50%, #00ffff 100%)",
+  boxShadow: "0 12px 40px rgba(0, 217, 255, 0.4), 0 0 60px rgba(255, 0, 110, 0.2)",
+  transition: "all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
+  animation: `${pulse} 3s ease-in-out infinite`,
   "&:hover": {
-    boxShadow: "0 12px 40px rgba(217, 70, 239, 0.5)",
-    transform: "scale(1.1) rotate(90deg)",
+    boxShadow: "0 16px 60px rgba(0, 217, 255, 0.6), 0 0 80px rgba(255, 0, 110, 0.3)",
+    transform: "scale(1.15)",
+    filter: "drop-shadow(0 0 20px rgba(255, 0, 110, 0.4))",
   },
   "&:active": {
     transform: "scale(0.95)",
@@ -103,37 +127,76 @@ const StyledFab = styled(Fab)(({ theme }) => ({
 }));
 
 const ActionIcon = styled(IconButton)(({ theme }) => ({
-  color: theme.palette.text.secondary,
-  transition: "all 0.3s ease",
+  color: theme.palette.mode === "dark" ? "rgba(0, 255, 255, 0.7)" : "rgba(0, 100, 120, 0.6)",
+  transition: "all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
+  borderRadius: "12px",
+  padding: "8px",
   "&:hover": {
-    color: "#d946ef",
-    transform: "scale(1.15)",
+    color: "#00ffff",
+    background: "rgba(0, 217, 255, 0.15)",
+    transform: "scale(1.2) rotate(10deg)",
+    boxShadow: "0 0 20px rgba(0, 217, 255, 0.3)",
   },
 }));
 
 const StyledButton = styled(Button)(({ theme }) => ({
   textTransform: "none",
-  fontWeight: 600,
-  borderRadius: "10px",
-  background: "linear-gradient(135deg, #0a7ea4 0%, #06b6d4 100%)",
-  boxShadow: "0 4px 16px rgba(10, 126, 164, 0.3)",
-  transition: "all 0.3s ease",
+  fontWeight: 700,
+  borderRadius: "14px",
+  fontSize: "14px",
+  padding: "12px 24px",
+  background: "linear-gradient(135deg, #00ffff 0%, #ff006e 100%)",
+  boxShadow: "0 8px 32px rgba(0, 217, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)",
+  transition: "all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
+  color: "#0a0e27",
+  letterSpacing: "0.5px",
   "&:hover": {
-    boxShadow: "0 8px 32px rgba(10, 126, 164, 0.5)",
-    transform: "translateY(-2px)",
+    boxShadow: "0 12px 48px rgba(0, 217, 255, 0.5), inset 0 2px 4px rgba(255, 255, 255, 0.3)",
+    transform: "translateY(-3px)",
+    filter: "brightness(1.1) saturate(120%)",
+  },
+  "&:active": {
+    transform: "translateY(-1px)",
   },
 }));
 
 const StyledUserBox = styled(Box)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
-  gap: "12px",
-  padding: "12px",
+  gap: "14px",
+  padding: "14px",
   backgroundColor: theme.palette.mode === "dark"
-    ? "rgba(255, 255, 255, 0.05)"
-    : "rgba(0, 0, 0, 0.02)",
-  borderRadius: "12px",
+    ? "rgba(0, 217, 255, 0.05)"
+    : "rgba(0, 217, 255, 0.03)",
+  border: "1.5px solid rgba(0, 217, 255, 0.1)",
+  borderRadius: "16px",
   marginBottom: "16px",
+  transition: "all 0.3s ease",
+  "&:hover": {
+    borderColor: "rgba(0, 217, 255, 0.2)",
+    backgroundColor: theme.palette.mode === "dark"
+      ? "rgba(0, 217, 255, 0.08)"
+      : "rgba(0, 217, 255, 0.05)",
+  },
+}));
+
+const ActionIconsBox = styled(Box)(({ theme }) => ({
+  display: "flex",
+  gap: "10px",
+  padding: "14px",
+  backgroundColor: theme.palette.mode === "dark"
+    ? "rgba(0, 217, 255, 0.05)"
+    : "rgba(0, 217, 255, 0.03)",
+  border: "1.5px solid rgba(0, 217, 255, 0.1)",
+  borderRadius: "16px",
+  marginBottom: "16px",
+  transition: "all 0.3s ease",
+  "&:hover": {
+    borderColor: "rgba(0, 217, 255, 0.2)",
+    backgroundColor: theme.palette.mode === "dark"
+      ? "rgba(0, 217, 255, 0.08)"
+      : "rgba(0, 217, 255, 0.05)",
+  },
 }));
 
 function AddIcon({ darkMode }) {
@@ -172,19 +235,20 @@ function AddIcon({ darkMode }) {
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              marginBottom: "16px",
+              marginBottom: "18px",
             }}
           >
             <Typography
               id="create-post-modal"
               variant="h6"
               sx={{
-                fontWeight: 700,
-                fontSize: "18px",
-                background: "linear-gradient(135deg, #0a7ea4 0%, #d946ef 100%)",
+                fontWeight: 800,
+                fontSize: "20px",
+                background: "linear-gradient(135deg, #00ffff 0%, #ff006e 100%)",
                 backgroundClip: "text",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
+                letterSpacing: "0.5px",
               }}
             >
               ✨ Create a Post
@@ -192,16 +256,26 @@ function AddIcon({ darkMode }) {
             <IconButton
               onClick={onCloseModalHandler}
               sx={{
-                color: "text.secondary",
-                transition: "all 0.3s ease",
-                "&:hover": { color: "#d946ef", transform: "rotate(90deg)" },
+                color: "#00ffff",
+                transition: "all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                "&:hover": {
+                  color: "#ff006e",
+                  transform: "rotate(90deg) scale(1.2)",
+                  boxShadow: "0 0 20px rgba(255, 0, 110, 0.4)",
+                },
               }}
             >
               <Close />
             </IconButton>
           </Box>
 
-          <Divider sx={{ mb: 2, opacity: 0.3 }} />
+          <Divider
+            sx={{
+              mb: 2.5,
+              background: "linear-gradient(135deg, rgba(0, 217, 255, 0.3) 0%, rgba(255, 0, 110, 0.3) 100%)",
+              opacity: 0.5,
+            }}
+          />
 
           {/* User Info */}
           <StyledUserBox>
@@ -209,16 +283,16 @@ function AddIcon({ darkMode }) {
               alt="User"
               src={AvatarIMG}
               sx={{
-                width: 44,
-                height: 44,
-                border: "2px solid rgba(217, 70, 239, 0.3)",
-                boxShadow: "0 0 12px rgba(217, 70, 239, 0.2)",
+                width: 48,
+                height: 48,
+                border: "2.5px solid rgba(0, 217, 255, 0.4)",
+                boxShadow: "0 0 16px rgba(0, 217, 255, 0.3), inset 0 0 12px rgba(0, 217, 255, 0.1)",
               }}
             />
             <Box>
               <Typography
                 variant="body2"
-                sx={{ fontWeight: 600, fontSize: "14px" }}
+                sx={{ fontWeight: 700, fontSize: "15px", background: "linear-gradient(135deg, #00ffff 0%, #ff006e 100%)", backgroundClip: "text", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}
               >
                 Sarah Anderson
               </Typography>
@@ -227,11 +301,13 @@ function AddIcon({ darkMode }) {
                 size="small"
                 variant="outlined"
                 sx={{
-                  height: "20px",
+                  height: "22px",
                   fontSize: "11px",
-                  mt: "2px",
-                  borderColor: "rgba(217, 70, 239, 0.3)",
-                  color: "#d946ef",
+                  mt: "3px",
+                  borderColor: "rgba(0, 217, 255, 0.4)",
+                  color: "#00ffff",
+                  background: "rgba(0, 217, 255, 0.08)",
+                  fontWeight: 700,
                 }}
               />
             </Box>
@@ -250,19 +326,7 @@ function AddIcon({ darkMode }) {
           />
 
           {/* Action Icons */}
-          <Box
-            sx={{
-              display: "flex",
-              gap: "8px",
-              padding: "12px",
-              backgroundColor: (theme) =>
-                theme.palette.mode === "dark"
-                  ? "rgba(255, 255, 255, 0.05)"
-                  : "rgba(0, 0, 0, 0.02)",
-              borderRadius: "12px",
-              marginBottom: "16px",
-            }}
-          >
+          <ActionIconsBox>
             <Tooltip title="Add Emoji" arrow>
               <ActionIcon size="small">
                 <EmojiEmotionsIcon />
@@ -283,9 +347,15 @@ function AddIcon({ darkMode }) {
                 <MoodIcon />
               </ActionIcon>
             </Tooltip>
-          </Box>
+          </ActionIconsBox>
 
-          <Divider sx={{ mb: 2, opacity: 0.3 }} />
+          <Divider
+            sx={{
+              mb: 2.5,
+              background: "linear-gradient(135deg, rgba(0, 217, 255, 0.3) 0%, rgba(255, 0, 110, 0.3) 100%)",
+              opacity: 0.5,
+            }}
+          />
 
           {/* Buttons */}
           <Box sx={{ display: "flex", gap: "12px" }}>
@@ -305,13 +375,19 @@ function AddIcon({ darkMode }) {
               variant="outlined"
               onClick={onCloseModalHandler}
               sx={{
-                borderColor: "rgba(217, 70, 239, 0.3)",
-                color: "#d946ef",
-                borderRadius: "10px",
-                transition: "all 0.3s ease",
+                borderColor: "rgba(0, 217, 255, 0.4)",
+                color: "#00ffff",
+                borderRadius: "14px",
+                fontWeight: 700,
+                fontSize: "14px",
+                padding: "12px",
+                transition: "all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                border: "1.5px solid rgba(0, 217, 255, 0.4)",
                 "&:hover": {
-                  borderColor: "#d946ef",
-                  backgroundColor: "rgba(217, 70, 239, 0.1)",
+                  borderColor: "#00ffff",
+                  backgroundColor: "rgba(0, 217, 255, 0.15)",
+                  boxShadow: "0 0 20px rgba(0, 217, 255, 0.3)",
+                  transform: "translateY(-2px)",
                 },
               }}
             >

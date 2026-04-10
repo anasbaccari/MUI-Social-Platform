@@ -9,31 +9,45 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 
 export const data = [
   {
+    id: "home",
     title: "Home",
+    subtitle: "Your personal feed",
     icon: <HomeIcon />,
   },
   {
+    id: "pages",
     title: "Pages",
+    subtitle: "Saved and followed pages",
     icon: <ArticleIcon />,
   },
   {
+    id: "groups",
     title: "Groups",
+    subtitle: "Community updates",
     icon: <GroupIcon />,
   },
   {
-    title: "MarketPlace",
+    id: "marketplace",
+    title: "Marketplace",
+    subtitle: "Buy and sell quickly",
     icon: <StorefrontIcon />,
   },
   {
+    id: "friends",
     title: "Friends",
+    subtitle: "People you know",
     icon: <PersonIcon />,
   },
   {
+    id: "settings",
     title: "Settings",
+    subtitle: "Privacy and preferences",
     icon: <SettingsIcon />,
   },
   {
+    id: "profile",
     title: "Profile",
+    subtitle: "Your public timeline",
     icon: <AccountBoxIcon />,
   },
 ];

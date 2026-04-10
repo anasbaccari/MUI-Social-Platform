@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { Favorite, FavoriteBorder, MoreVert, Share } from "@mui/icons-material";
 import {
   Avatar,
@@ -16,160 +15,197 @@ import {
 } from "@mui/material";
 import AvatarImage from "../../assets/avatar.jpg";
 import CommentIcon from "@mui/icons-material/Comment";
+import { useState } from "react";
+
+const posts = [
+  {
+    id: "post-1",
+    author: "Sarah Anderson",
+    publishedAt: "2h ago",
+    location: "Paris, France",
+    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&h=480&fit=crop",
+    text: "Captured this sunset while exploring side streets near the river. Travel always resets my creativity.",
+    likes: "2.4K",
+    comments: "342",
+  },
+  {
+    id: "post-2",
+    author: "Sarah Anderson",
+    publishedAt: "4h ago",
+    location: "Dubai, UAE",
+    image: "https://images.unsplash.com/photo-1495704686750-30318e92e68f?w=900&h=480&fit=crop",
+    text: "Quick team meetup before launch week. Great momentum and even better conversations.",
+    likes: "1.8K",
+    comments: "128",
+  },
+  {
+    id: "post-3",
+    author: "Sarah Anderson",
+    publishedAt: "6h ago",
+    location: "New York, USA",
+    image: "https://images.unsplash.com/photo-1518391846015-55a9cc003b25?w=900&h=480&fit=crop",
+    text: "Late-night city walks are underrated. This skyline always feels like a movie set.",
+    likes: "3.2K",
+    comments: "456",
+  },
+];
 
 const StyledCard = styled(Card)(({ theme }) => ({
-  maxWidth: "600px",
-  margin: "0 auto 20px",
-  background: theme.palette.mode === "dark"
-    ? "rgba(26, 26, 46, 0.8)"
-    : "rgba(255, 255, 255, 0.95)",
-  backdropFilter: "blur(10px)",
-  border: theme.palette.mode === "dark"
-    ? "1px solid rgba(255, 255, 255, 0.1)"
-    : "1px solid rgba(0, 0, 0, 0.05)",
-  borderRadius: "16px",
-  transition: "all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+  maxWidth: "650px",
+  margin: "0 auto 24px",
+  background:
+    theme.palette.mode === "dark"
+      ? "linear-gradient(135deg, rgba(17, 24, 52, 0.6) 0%, rgba(20, 30, 60, 0.4) 100%)"
+      : "rgba(255, 255, 255, 0.98)",
+  backdropFilter: "blur(30px) saturate(180%)",
+  border:
+    theme.palette.mode === "dark"
+      ? "1.5px solid rgba(0, 217, 255, 0.2)"
+      : "1.5px solid rgba(0, 217, 255, 0.1)",
+  borderRadius: "20px",
+  transition: "all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)",
   overflow: "hidden",
+  position: "relative",
+  perspective: "1000px",
   "&:hover": {
-    transform: "translateY(-6px)",
-    boxShadow: theme.palette.mode === "dark"
-      ? "0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(217, 70, 239, 0.2)"
-      : "0 20px 60px rgba(0, 0, 0, 0.15), 0 0 40px rgba(10, 126, 164, 0.1)",
-    borderColor: theme.palette.mode === "dark"
-      ? "rgba(217, 70, 239, 0.4)"
-      : "rgba(10, 126, 164, 0.2)",
+    transform: "translateY(-12px) rotateX(2deg) rotateY(-1deg)",
+    boxShadow:
+      theme.palette.mode === "dark"
+        ? "0 30px 80px rgba(0, 0, 0, 0.6), 0 0 60px rgba(0, 217, 255, 0.3), inset 0 1px 1px rgba(0, 217, 255, 0.2)"
+        : "0 30px 80px rgba(0, 0, 0, 0.15), 0 0 60px rgba(0, 217, 255, 0.2)",
+    borderColor: "#00d9ff",
+    background:
+      theme.palette.mode === "dark"
+        ? "linear-gradient(135deg, rgba(17, 24, 52, 0.8) 0%, rgba(20, 30, 60, 0.6) 100%)"
+        : "rgba(255, 255, 255, 1)",
   },
 }));
 
-const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
+const StyledCardHeader = styled(CardHeader)({
   paddingBottom: "12px",
   "& .MuiCardHeader-action": {
     marginTop: 0,
     marginRight: 0,
   },
-}));
+});
 
-const StyledAvatar = styled(Avatar)(({ theme }) => ({
-  width: 48,
-  height: 48,
-  border: "2px solid rgba(217, 70, 239, 0.3)",
-  boxShadow: "0 0 16px rgba(217, 70, 239, 0.2)",
-  transition: "all 0.3s ease",
+const StyledAvatar = styled(Avatar)({
+  width: 52,
+  height: 52,
+  border: "2.5px solid",
+  borderImage: "linear-gradient(135deg, #00ffff 0%, #ff006e 100%) 1",
+  boxShadow: "0 0 25px rgba(0, 217, 255, 0.4), inset 0 0 15px rgba(0, 217, 255, 0.1)",
+  transition: "all 0.4s ease",
   "&:hover": {
-    boxShadow: "0 0 24px rgba(217, 70, 239, 0.4)",
-    borderColor: "rgba(217, 70, 239, 0.6)",
+    boxShadow: "0 0 40px rgba(0, 217, 255, 0.6), inset 0 0 25px rgba(0, 217, 255, 0.2)",
+    transform: "scale(1.08)",
   },
-}));
+});
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
-  transition: "all 0.3s ease",
+  transition: "all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
   color: theme.palette.text.secondary,
   "&:hover": {
-    color: "#d946ef",
-    transform: "scale(1.15)",
+    color: "#00ffff",
+    transform: "scale(1.25) rotate(20deg)",
+    textShadow: "0 0 20px rgba(0, 217, 255, 0.6)",
   },
 }));
 
+const StyledCardMedia = styled(CardMedia)({
+  height: "360px",
+  transition: "all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)",
+  position: "relative",
+  overflow: "hidden",
+  "&::after": {
+    content: '""',
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: "linear-gradient(135deg, transparent 0%, rgba(0, 217, 255, 0.1) 100%)",
+    opacity: 0,
+    transition: "opacity 0.6s ease",
+  },
+  "&:hover": {
+    filter: "brightness(1.1) contrast(1.1)",
+    "&::after": {
+      opacity: 1,
+    },
+  },
+});
+
 function Feed({ darkMode }) {
-  const handleLike = (event) => {
-    event.stopPropagation();
+  const [liked, setLiked] = useState(
+    Object.fromEntries(posts.map((post) => [post.id, false])),
+  );
+
+  const handleLike = (postId) => {
+    setLiked((prev) => ({
+      ...prev,
+      [postId]: !prev[postId],
+    }));
   };
 
   return (
-    <Box flex="3" sx={{ padding: { xs: "20px 10px 0", md: "20px 20px 0" } }}>
-      {Array(3)
-        .fill()
-        .map((_, idx) => (
-          <StyledCard key={crypto.randomUUID()}>
-            <StyledCardHeader
-              avatar={
-                <StyledAvatar
-                  alt="Mehdi Zandian"
-                  src={AvatarImage}
-                />
-              }
-              action={
-                <Tooltip title="More options" arrow>
-                  <StyledIconButton aria-label="settings">
-                    <MoreVert />
-                  </StyledIconButton>
-                </Tooltip>
-              }
-              title={
-                <Typography
-                  variant="body1"
-                  sx={{ fontWeight: 600, fontSize: "15px" }}
-                >
-                  Anas Baccari
-                </Typography>
-              }
-              subheader={
-                <Typography
-                  variant="caption"
-                  sx={{
-                    opacity: 0.7,
-                    fontSize: "12px",
-                  }}
-                >
-                  2 hours ago · {idx === 0 ? "📍 Paris, France" : idx === 1 ? "📍 Dubai, UAE" : "📍 New York, USA"}
-                </Typography>
-              }
-              sx={{
-                "& .MuiCardHeader-title": {
-                  marginBottom: "4px",
-                },
-              }}
-            />
-            <CardMedia
-              component="img"
-              height="350"
-              image={
-                idx === 0
-                  ? "https://images.unsplash.com/photo-1642895106379-307f3c889f9a?w=800&h=400&fit=crop"
-                  : idx === 1
-                  ? "https://images.unsplash.com/photo-1495704686750-30318e92e68f?w=800&h=400&fit=crop"
-                  : "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=400&fit=crop"
-              }
-              alt="Post"
-              sx={{
-                objectFit: "cover",
-                transition: "all 0.4s ease",
-                "&:hover": {
-                  filter: "brightness(0.95)",
-                },
-              }}
-            />
-            <CardContent>
-              <Typography
-                variant="body2"
-                sx={{
-                  lineHeight: 1.7,
-                  fontSize: "15px",
-                  fontWeight: 500,
-                }}
-              >
-                {idx === 0
-                  ? "✨ Just captured this stunning sunset moment! Perfect day exploring the beauty of European architecture. Who else loves travel? #wanderlust #paris"
-                  : idx === 1
-                  ? "🎉 Amazing weekend with the team! Nothing beats good vibes and better company. Let's keep building something great together! #teamwork #dubai"
-                  : "🌟 New York energy is unbeatable! The city that never sleeps has my heart. What's your favorite NYC experience? #newyork #citylife"}
+    <Box flex="3" sx={{ padding: { xs: "20px 10px 0", md: "20px 24px 0" } }}>
+      {posts.map((post) => (
+        <StyledCard key={post.id}>
+          <StyledCardHeader
+            avatar={<StyledAvatar alt={post.author} src={AvatarImage} />}
+            action={
+              <Tooltip title="More options" arrow>
+                <StyledIconButton aria-label="Open post settings">
+                  <MoreVert />
+                </StyledIconButton>
+              </Tooltip>
+            }
+            title={
+              <Typography variant="body1" sx={{ fontWeight: 700, fontSize: "16px" }}>
+                {post.author}
               </Typography>
-            </CardContent>
-            <CardActions
-              disableSpacing
-              sx={{
-                padding: "12px 16px",
-                gap: "8px",
-                "& .MuiIconButton-root": {
-                  padding: "8px",
-                },
-              }}
-            >
+            }
+            subheader={
+              <Typography variant="caption" sx={{ opacity: 0.7, fontSize: "12px" }}>
+                {post.publishedAt} · {post.location}
+              </Typography>
+            }
+          />
+          <StyledCardMedia component="img" image={post.image} alt={post.location} loading="lazy" />
+          <CardContent>
+            <Typography variant="body2" sx={{ lineHeight: 1.8, fontSize: "15px", fontWeight: 500 }}>
+              {post.text}
+            </Typography>
+          </CardContent>
+          <CardActions
+            disableSpacing
+            sx={{
+              padding: "12px 20px",
+              gap: "16px",
+              background: darkMode ? "rgba(0, 217, 255, 0.05)" : "rgba(0, 217, 255, 0.02)",
+              borderTop: darkMode
+                ? "1px solid rgba(0, 217, 255, 0.1)"
+                : "1px solid rgba(0, 217, 255, 0.05)",
+            }}
+          >
+            <Box sx={{ display: "flex", alignItems: "center", gap: "4px" }}>
               <Tooltip title="Like" arrow>
-                <StyledIconButton aria-label="add to favorites">
+                <StyledIconButton
+                  aria-label={`Like post from ${post.author}`}
+                  onClick={() => handleLike(post.id)}
+                >
                   <Checkbox
+                    checked={liked[post.id]}
                     icon={<FavoriteBorder />}
-                    checkedIcon={<Favorite sx={{ color: "#d946ef" }} />}
+                    checkedIcon={
+                      <Favorite
+                        sx={{
+                          color: "#ff006e",
+                          filter: "drop-shadow(0 0 10px #ff006e)",
+                        }}
+                      />
+                    }
                   />
                 </StyledIconButton>
               </Tooltip>
@@ -177,16 +213,20 @@ function Feed({ darkMode }) {
                 variant="caption"
                 sx={{
                   fontSize: "13px",
-                  opacity: 0.8,
-                  fontWeight: 600,
-                  minWidth: "30px",
+                  fontWeight: 700,
+                  background: "linear-gradient(135deg, #00ffff 0%, #ff006e 100%)",
+                  backgroundClip: "text",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
                 }}
               >
-                {idx === 0 ? "2.4K" : idx === 1 ? "1.8K" : "3.2K"}
+                {post.likes}
               </Typography>
+            </Box>
 
+            <Box sx={{ display: "flex", alignItems: "center", gap: "4px" }}>
               <Tooltip title="Comment" arrow>
-                <StyledIconButton aria-label="comment">
+                <StyledIconButton aria-label={`Comment on post from ${post.author}`}>
                   <CommentIcon />
                 </StyledIconButton>
               </Tooltip>
@@ -194,21 +234,22 @@ function Feed({ darkMode }) {
                 variant="caption"
                 sx={{
                   fontSize: "13px",
-                  opacity: 0.8,
-                  fontWeight: 600,
+                  fontWeight: 700,
+                  color: "#00ffff",
                 }}
               >
-                {idx === 0 ? "342" : idx === 1 ? "128" : "456"}
+                {post.comments}
               </Typography>
+            </Box>
 
-              <Tooltip title="Share" arrow>
-                <StyledIconButton aria-label="share" sx={{ ml: "auto" }}>
-                  <Share />
-                </StyledIconButton>
-              </Tooltip>
-            </CardActions>
-          </StyledCard>
-        ))}
+            <Tooltip title="Share" arrow>
+              <StyledIconButton aria-label={`Share post from ${post.author}`} sx={{ ml: "auto" }}>
+                <Share />
+              </StyledIconButton>
+            </Tooltip>
+          </CardActions>
+        </StyledCard>
+      ))}
     </Box>
   );
 }

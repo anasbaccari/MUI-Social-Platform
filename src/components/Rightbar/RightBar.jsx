@@ -6,17 +6,17 @@ import UserLists from "./UserLists";
 const RightBarContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
-  gap: "16px",
+  gap: "18px",
   [theme.breakpoints.down("lg")]: {
     alignItems: "center",
     textAlign: "center",
     paddingBottom: "100px",
-    paddingLeft: "10px",
-    paddingRight: "10px",
-    paddingTop: "10px",
+    paddingLeft: "12px",
+    paddingRight: "12px",
+    paddingTop: "12px",
   },
   [theme.breakpoints.up("lg")]: {
-    maxWidth: "320px",
+    maxWidth: "340px",
   },
 }));
 
@@ -33,7 +33,7 @@ function RightBar({ darkMode }) {
         sx={{
           display: "flex",
           flexDirection: "column",
-          gap: "16px",
+          gap: "18px",
           width: "100%",
         }}
       >
