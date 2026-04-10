@@ -1,33 +1,47 @@
-import { Box } from "@mui/material";
+import { Box, styled } from "@mui/material";
 import OnlineFriends from "./OnlineFriends";
 import LatestPhotos from "./LatestPhotos";
 import UserLists from "./UserLists";
 
-function RightBar() {
+const RightBarContainer = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  gap: "16px",
+  [theme.breakpoints.down("lg")]: {
+    alignItems: "center",
+    textAlign: "center",
+    paddingBottom: "100px",
+    paddingLeft: "10px",
+    paddingRight: "10px",
+    paddingTop: "10px",
+  },
+  [theme.breakpoints.up("lg")]: {
+    maxWidth: "320px",
+  },
+}));
+
+function RightBar({ darkMode }) {
   return (
-    <Box
+    <RightBarContainer
       flex="1"
       sx={{
-        p: { xs: "10px 10px 100px 10px", lg: "10px" },
-        borderLeft: "1px solid rgba(0,0,0,0.1)",
+        position: { lg: "sticky" },
+        top: { lg: "80px" },
       }}
     >
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
-          alignItems: { xs: "center", lg: "start" },
-          textAlign: { xs: "center", lg: "start" },
+          gap: "16px",
+          width: "100%",
         }}
-        position="sticky"
-        top={0}
-        left={0}
       >
         <OnlineFriends />
         <LatestPhotos />
         <UserLists />
       </Box>
-    </Box>
+    </RightBarContainer>
   );
 }
 
