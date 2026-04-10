@@ -20,7 +20,7 @@ const RightBarContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
-function RightBar({ darkMode }) {
+function RightBar() {
   return (
     <RightBarContainer
       flex="1"

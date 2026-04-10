@@ -199,7 +199,7 @@ const ActionIconsBox = styled(Box)(({ theme }) => ({
   },
 }));
 
-function AddIcon({ darkMode }) {
+function AddIcon() {
   const [openModal, setOpenModal] = useState(false);
   const onOpenModalHandler = () => setOpenModal(true);
   const onCloseModalHandler = () => setOpenModal(false);
@@ -251,7 +251,7 @@ function AddIcon({ darkMode }) {
                 letterSpacing: "0.5px",
               }}
             >
-              ✨ Create a Post
+              Create a Post
             </Typography>
             <IconButton
               onClick={onCloseModalHandler}
@@ -401,3 +401,4 @@ function AddIcon({ darkMode }) {
 }
 
 export default AddIcon;
+

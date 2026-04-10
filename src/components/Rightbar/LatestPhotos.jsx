@@ -14,23 +14,44 @@ const photoHover = keyframes`
   100% { opacity: 1; transform: scale(1) rotate(0deg); }
 `;
 
+const photos = [
+  {
+    id: "photo-travel",
+    src: "https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=320&h=320&fit=crop",
+    label: "Travel",
+  },
+  {
+    id: "photo-mountain",
+    src: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=320&h=320&fit=crop",
+    label: "Mountain",
+  },
+  {
+    id: "photo-city",
+    src: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=320&h=320&fit=crop",
+    label: "City",
+  },
+];
+
 const PhotoContainer = styled(Box)(({ theme }) => ({
   padding: "18px",
-  background: theme.palette.mode === "dark"
-    ? "linear-gradient(135deg, rgba(17, 24, 52, 0.5) 0%, rgba(20, 30, 60, 0.3) 100%)"
-    : "linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(248, 249, 255, 0.6) 100%)",
+  background:
+    theme.palette.mode === "dark"
+      ? "linear-gradient(135deg, rgba(17, 24, 52, 0.5) 0%, rgba(20, 30, 60, 0.3) 100%)"
+      : "linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(248, 249, 255, 0.6) 100%)",
   backdropFilter: "blur(20px) saturate(180%)",
-  border: theme.palette.mode === "dark"
-    ? "1.5px solid rgba(0, 217, 255, 0.2)"
-    : "1.5px solid rgba(0, 217, 255, 0.1)",
+  border:
+    theme.palette.mode === "dark"
+      ? "1.5px solid rgba(0, 217, 255, 0.2)"
+      : "1.5px solid rgba(0, 217, 255, 0.1)",
   borderRadius: "20px",
   marginBottom: "18px",
-  boxShadow: theme.palette.mode === "dark"
-    ? "0 12px 48px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(0, 217, 255, 0.1)"
-    : "0 12px 48px rgba(0, 0, 0, 0.08)",
+  boxShadow:
+    theme.palette.mode === "dark"
+      ? "0 12px 48px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(0, 217, 255, 0.1)"
+      : "0 12px 48px rgba(0, 0, 0, 0.08)",
 }));
 
-const StyledImageListItem = styled(ImageListItem)(({ theme }) => ({
+const StyledImageListItem = styled(ImageListItem)({
   borderRadius: "16px",
   overflow: "hidden",
   cursor: "pointer",
@@ -60,30 +81,14 @@ const StyledImageListItem = styled(ImageListItem)(({ theme }) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    fontSize: "32px",
+    fontSize: "12px",
+    fontWeight: 700,
+    letterSpacing: "1px",
     backdropFilter: "blur(5px)",
   },
-}));
+});
 
 function LatestPhotos() {
-  const photos = [
-    {
-      src: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=300&fit=crop",
-      label: "Nature",
-      emoji: "🏔️",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=300&fit=crop",
-      label: "Mountains",
-      emoji: "⛰️",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=300&fit=crop",
-      label: "Adventure",
-      emoji: "🌄",
-    },
-  ];
-
   return (
     <PhotoContainer>
       <Typography
@@ -100,12 +105,12 @@ function LatestPhotos() {
           letterSpacing: "1px",
         }}
       >
-        📸 Latest Photos
+        Latest Photos
       </Typography>
 
       <ImageList rowHeight={120} gap={10} cols={3} sx={{ m: 0 }}>
         {photos.map((photo) => (
-          <Tooltip key={photo.label} title={photo.label} arrow>
+          <Tooltip key={photo.id} title={photo.label} arrow>
             <StyledImageListItem>
               <img
                 style={{
@@ -117,8 +122,9 @@ function LatestPhotos() {
                 }}
                 src={photo.src}
                 alt={photo.label}
+                loading="lazy"
               />
-              <div className="photo-overlay">{photo.emoji}</div>
+              <div className="photo-overlay">{photo.label.toUpperCase()}</div>
             </StyledImageListItem>
           </Tooltip>
         ))}

@@ -14,6 +14,7 @@ import { data } from "../../data/SideBarData";
 import WbSunnyIcon from "@mui/icons-material/WbSunny";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
   transition: "all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
@@ -87,7 +88,7 @@ const SidebarContainer = styled(Box)(({ theme }) => ({
 }));
 
 function SideBar({ mode, darkModeHandler }) {
-  const [activeItem, setActiveItem] = useState("home");
+  const location = useLocation();
 
   return (
     <Box
@@ -108,13 +109,17 @@ function SideBar({ mode, darkModeHandler }) {
         <SidebarContainer>
           <List sx={{ width: "100%" }}>
             {data.map((item, idx) => {
+              const isActive = location.pathname === item.path;
               return (
                 <Tooltip key={item.id} title={item.title} arrow>
                   <StyledListItem disablePadding sx={{ animationDelay: `${idx * 0.1}s` }}>
                     <StyledListItemButton
-                      selected={activeItem === item.id}
-                      onClick={() => setActiveItem(item.id)}
+                      component={Link}
+                      to={item.path}
+                      selected={isActive}
                       sx={{
+                        textDecoration: "none",
+                        color: "inherit",
                         "&.Mui-selected": {
                           background: mode
                             ? "linear-gradient(135deg, rgba(0, 217, 255, 0.16) 0%, rgba(255, 0, 110, 0.08) 100%)"
